@@ -1,0 +1,57 @@
+[submodule "core/codex"]
+	path = core/codex
+	url = git@github.com:openai/codex.git
+[submodule "core/openai-agents-python"]
+	path = core/openai-agents-python
+	url = git@github.com:openai/openai-agents-python.git
+[submodule "core/openai-agents-js"]
+	path = core/openai-agents-js
+	url = git@github.com:openai/openai-agents-js.git
+[submodule "core/agents.md"]
+	path = core/agents.md
+	url = git@github.com:openai/agents.md.git
+[submodule "sdk/openai-python"]
+	path = sdk/openai-python
+	url = git@github.com:openai/openai-python.git
+[submodule "sdk/openai-node"]
+	path = sdk/openai-node
+	url = git@github.com:openai/openai-node.git
+[submodule "examples/openai-quickstart-node"]
+	path = examples/openai-quickstart-node
+	url = git@github.com:openai/openai-quickstart-node.git
+[submodule "examples/openai-responses-starter-app"]
+	path = examples/openai-responses-starter-app
+	url = git@github.com:openai/openai-responses-starter-app.git
+[submodule "examples/openai-cs-agents-demo"]
+	path = examples/openai-cs-agents-demo
+	url = git@github.com:openai/openai-cs-agents-demo.git
+[submodule "examples/openai-support-agent-demo"]
+	path = examples/openai-support-agent-demo
+	url = git@github.com:openai/openai-support-agent-demo.git
+[submodule "voice/whisper"]
+	path = voice/whisper
+	url = git@github.com:openai/whisper.git
+[submodule "voice/openai-voice-agent-sdk-sample"]
+	path = voice/openai-voice-agent-sdk-sample
+	url = git@github.com:openai/openai-voice-agent-sdk-sample.git
+[submodule "realtime/openai-realtime-agents"]
+	path = realtime/openai-realtime-agents
+	url = git@github.com:openai/openai-realtime-agents.git
+[submodule "realtime/openai-realtime-console"]
+	path = realtime/openai-realtime-console
+	url = git@github.com:openai/openai-realtime-console.git
+[submodule "utils/tiktoken"]
+	path = utils/tiktoken
+	url = git@github.com:openai/tiktoken.git
+[submodule "utils/codex-universal"]
+	path = utils/codex-universal
+	url = git@github.com:openai/codex-universal.git
+[submodule "specs/model_spec"]
+	path = specs/model_spec
+	url = git@github.com:openai/model_spec.git
+[submodule "specs/evals"]
+	path = specs/evals
+	url = git@github.com:openai/evals.git
+[submodule "specs/frontier-evals"]
+	path = specs/frontier-evals
+	url = git@github.com:openai/frontier-evals.git
