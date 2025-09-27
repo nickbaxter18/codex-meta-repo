@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run secret scanning
+echo "🔍 Running secret scan..."
+./gitleaks detect --source . --verbose --config .gitleaks.toml
+
+# Run linting for frontend
+echo "🔍 Running frontend linting..."
+cd U-DIG-IT/frontend && pnpm lint
+
+# Run backend security checks
+echo "🔍 Running backend security checks..."
+cd ../backend && poetry run safety check
+
+# Run tests
+echo "🧪 Running tests..."
+cd ../frontend && pnpm test:ci
+cd ../backend && poetry run pytest tests/unit/ -v
+
+echo "✅ All pre-commit checks passed!"
+

@@ -38,7 +38,11 @@ def _parse_duration(value: str | int | float | None, default_minutes: int) -> in
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parents[1] / ".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=Path(__file__).resolve().parents[1] / ".env", 
+        env_file_encoding="utf-8",
+        populate_by_name=True
+    )
 
     app_name: str = Field(default="U-DIG-IT API")
     environment: str = Field(default="development", alias="BACKEND_ENVIRONMENT")
@@ -49,10 +53,18 @@ class Settings(BaseSettings):
 
     cors_origins: List[AnyHttpUrl] | List[str] = Field(default_factory=lambda: ["http://localhost:5173", "http://localhost:3000"], alias="CORS_ORIGIN")
 
-    jwt_secret: str = Field(default="change-me", alias="JWT_SECRET")
+    jwt_secret: str = Field(
+        default="", 
+        alias="JWT_SECRET",
+        description="JWT secret key for token signing (minimum 32 characters)"
+    )
     jwt_algorithm: str = "HS256"
     jwt_expires_in_minutes: int = Field(default=60 * 24, alias="JWT_EXPIRES_IN")
-    refresh_token_secret: str = Field(default="change-me-refresh", alias="REFRESH_TOKEN_SECRET")
+    refresh_token_secret: str = Field(
+        default="", 
+        alias="REFRESH_TOKEN_SECRET",
+        description="Refresh token secret key (minimum 32 characters)"
+    )
     refresh_token_expires_in_minutes: int = Field(default=60 * 24 * 14, alias="REFRESH_TOKEN_EXPIRES_IN")
 
     storage_provider: str | None = Field(default=None, alias="STORAGE_PROVIDER")
@@ -61,8 +73,6 @@ class Settings(BaseSettings):
     mixpanel_api_key: str | None = Field(default=None, alias="MIXPANEL_API_KEY")
     segment_write_key: str | None = Field(default=None, alias="SEGMENT_JS_WRITE_KEY")
 
-    class Config:
-        populate_by_name = True
 
     @model_validator(mode="after")
     def _normalize_durations(self) -> "Settings":
@@ -71,6 +81,31 @@ class Settings(BaseSettings):
 
         self.jwt_expires_in_minutes = _parse_duration(self.jwt_expires_in_minutes, 60 * 24)
         self.refresh_token_expires_in_minutes = _parse_duration(self.refresh_token_expires_in_minutes, 60 * 24 * 14)
+        return self
+
+    @model_validator(mode="after")
+    def _validate_security(self) -> "Settings":
+        """Validate security-critical configuration"""
+        if not self.jwt_secret or len(self.jwt_secret) < 32:
+            raise ValueError(
+                "JWT_SECRET must be provided and be at least 32 characters long. "
+                "Use a cryptographically secure random string."
+            )
+        
+        if not self.refresh_token_secret or len(self.refresh_token_secret) < 32:
+            raise ValueError(
+                "REFRESH_TOKEN_SECRET must be provided and be at least 32 characters long. "
+                "Use a cryptographically secure random string."
+            )
+        
+        # Check for weak secrets
+        weak_secrets = ["change-me", "secret", "password", "123456", "admin"]
+        if self.jwt_secret.lower() in weak_secrets or self.refresh_token_secret.lower() in weak_secrets:
+            raise ValueError(
+                "JWT_SECRET and REFRESH_TOKEN_SECRET must not use weak/default values. "
+                "Use cryptographically secure random strings."
+            )
+        
         return self
 
 

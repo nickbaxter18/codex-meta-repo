@@ -1,0 +1,60 @@
+# GitLeaks configuration for U-DIG-IT repository
+# This file defines custom rules for secret detection
+
+[gitleaks]
+    # Enable verbose output
+    verbose = true
+    
+    # Scan all branches
+    all-refs = true
+    
+    # Include commit messages
+    include-message = true
+    
+    # Redact secrets in output
+    redact = true
+
+# Custom rules for U-DIG-IT specific patterns
+[[rules]]
+    id = "udigit-jwt-secret"
+    description = "U-DIG-IT JWT secret key"
+    regex = '''jwt[_-]?secret["\s]*[:=]["\s]*["\']?[a-zA-Z0-9+/=]{20,}["\']?'''
+    tags = ["jwt", "secret", "udigit"]
+    severity = "high"
+
+[[rules]]
+    id = "udigit-database-url"
+    description = "U-DIG-IT database connection string"
+    regex = '''database[_-]?url["\s]*[:=]["\s]*["\']?[a-zA-Z0-9+/=:;@.-]{20,}["\']?'''
+    tags = ["database", "connection", "udigit"]
+    severity = "high"
+
+[[rules]]
+    id = "udigit-api-keys"
+    description = "U-DIG-IT API keys and tokens"
+    regex = '''(api[_-]?key|access[_-]?token|bearer[_-]?token)["\s]*[:=]["\s]*["\']?[a-zA-Z0-9+/=]{20,}["\']?'''
+    tags = ["api", "key", "token", "udigit"]
+    severity = "high"
+
+[[rules]]
+    id = "udigit-sentry-dsn"
+    description = "Sentry DSN configuration"
+    regex = '''sentry[_-]?dsn["\s]*[:=]["\s]*["\']?https://[a-zA-Z0-9+/=@.-]{20,}["\']?'''
+    tags = ["sentry", "dsn", "monitoring"]
+    severity = "medium"
+
+[[rules]]
+    id = "udigit-email-credentials"
+    description = "Email service credentials"
+    regex = '''(smtp[_-]?password|email[_-]?password|mail[_-]?password)["\s]*[:=]["\s]*["\']?[a-zA-Z0-9+/=]{8,}["\']?'''
+    tags = ["email", "smtp", "credentials"]
+    severity = "high"
+
+# Exclude patterns (false positives)
+[[rules]]
+    id = "exclude-example-files"
+    description = "Exclude example and test files"
+    regex = '''\.(example|sample|test)\.'''
+    tags = ["exclude"]
+    severity = "info"
+

@@ -1,0 +1,38 @@
+{
+  "name": "codex-meta-repo",
+  "version": "1.0.0",
+  "description": "Meta repository for U-DIG-IT equipment rental platform with OpenAI agent tooling",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "cd U-DIG-IT/frontend && pnpm lint",
+    "test": "cd U-DIG-IT/frontend && pnpm test",
+    "test:ci": "cd U-DIG-IT/frontend && pnpm test:ci",
+    "build": "cd U-DIG-IT/frontend && pnpm build",
+    "dev": "concurrently \"cd U-DIG-IT/backend && poetry run uvicorn main:app --reload\" \"cd U-DIG-IT/frontend && pnpm dev\"",
+    "security:scan": "./gitleaks detect --source . --verbose --config .gitleaks.toml",
+    "security:check": "cd U-DIG-IT/backend && poetry run safety check",
+    "install:all": "cd U-DIG-IT/backend && poetry install && cd ../frontend && pnpm install",
+    "clean": "rm -rf U-DIG-IT/backend/.pytest_cache U-DIG-IT/backend/htmlcov U-DIG-IT/frontend/coverage U-DIG-IT/frontend/dist"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.1",
+    "concurrently": "^9.1.0"
+  },
+  "lint-staged": {
+    "U-DIG-IT/frontend/**/*.{ts,tsx}": [
+      "cd U-DIG-IT/frontend && pnpm lint --fix",
+      "cd U-DIG-IT/frontend && pnpm test --run"
+    ],
+    "U-DIG-IT/backend/**/*.py": [
+      "cd U-DIG-IT/backend && poetry run black --check",
+      "cd U-DIG-IT/backend && poetry run isort --check-only",
+      "cd U-DIG-IT/backend && poetry run flake8"
+    ]
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
