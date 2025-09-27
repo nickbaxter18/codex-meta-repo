@@ -1,0 +1,105 @@
+# Elasticsearch MCP Server
+
+Interact with your Elasticsearch indices through natural language conversations.
+
+[What is an MCP Server?](https://www.anthropic.com/news/model-context-protocol)
+
+## Characteristics
+Attribute|Details|
+|-|-|
+**Docker Image**|[mcp/elasticsearch](https://hub.docker.com/repository/docker/mcp/elasticsearch)
+**Author**|[elastic](https://github.com/elastic)
+**Repository**|https://github.com/elastic/mcp-server-elasticsearch
+**Dockerfile**|https://github.com/elastic/mcp-server-elasticsearch/blob/v0.4.0/Dockerfile
+**Docker Image built by**|Docker Inc.
+**Docker Scout Health Score**| ![Docker Scout Health Score](https://api.scout.docker.com/v1/policy/insights/org-image-score/badge/mcp/elasticsearch)
+**Verify Signature**|`COSIGN_REPOSITORY=mcp/signatures cosign verify mcp/elasticsearch --key https://raw.githubusercontent.com/docker/keyring/refs/heads/main/public/mcp/latest.pub`
+**Licence**|Apache License 2.0
+
+## Available Tools (5)
+Tools provided by this Server|Short Description
+-|-
+`esql`|Elasticsearch ES|QL query|
+`get_mappings`|Get ES index mappings|
+`get_shards`|Get ES shard information|
+`list_indices`|List ES indices|
+`search`|Elasticsearch search DSL query|
+
+---
+## Tools Details
+
+#### Tool: **`esql`**
+Perform an Elasticsearch ES|QL query.
+Parameters|Type|Description
+-|-|-
+`query`|`string`|Complete Elasticsearch ES|QL query
+
+*This tool is read-only. It does not modify its environment.*
+
+---
+#### Tool: **`get_mappings`**
+Get field mappings for a specific Elasticsearch index
+Parameters|Type|Description
+-|-|-
+`index`|`string`|Name of the Elasticsearch index to get mappings for
+
+*This tool is read-only. It does not modify its environment.*
+
+---
+#### Tool: **`get_shards`**
+Get shard information for all or specific indices.
+Parameters|Type|Description
+-|-|-
+`index`|`string` *optional*|Optional index name to get shard information for
+
+*This tool is read-only. It does not modify its environment.*
+
+---
+#### Tool: **`list_indices`**
+List all available Elasticsearch indices
+Parameters|Type|Description
+-|-|-
+`index_pattern`|`string`|Index pattern of Elasticsearch indices to list
+
+*This tool is read-only. It does not modify its environment.*
+
+---
+#### Tool: **`search`**
+Perform an Elasticsearch search with the provided query DSL.
+Parameters|Type|Description
+-|-|-
+`index`|`string`|Name of the Elasticsearch index to search
+`query_body`|`object`|Complete Elasticsearch query DSL object that can include query, size, from, sort, etc.
+`fields`|`array` *optional*|Name of the fields that need to be returned (optional)
+
+*This tool is read-only. It does not modify its environment.*
+
+---
+## Use this MCP Server
+
+```json
+{
+  "mcpServers": {
+    "elasticsearch": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "ES_URL",
+        "-e",
+        "ES_API_KEY",
+        "mcp/elasticsearch",
+        "stdio"
+      ],
+      "env": {
+        "ES_URL": "http://localhost:9200",
+        "ES_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+[Why is it safer to run MCP Servers with Docker?](https://www.docker.com/blog/the-model-context-protocol-simplifying-building-ai-apps-with-anthropic-claude-desktop-and-docker/)
