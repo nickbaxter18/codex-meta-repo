@@ -1,0 +1,28 @@
+# build artifacts
+**/node_modules/
+**/.pnpm-store/
+**/dist/
+**/build/
+
+# python caches
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+
+# virtual environments
+**/.venv/
+**/.pytest_cache/
+
+# logs and dumps
+**/*.log
+**/*.sqlite
+
+# large datasets or generated docs
+specs/evals/evals/registry/data/**
+voice/whisper/test/**
+
+# git + editor metadata
+.git/
+.vscode/
+.idea/
+.DS_Store

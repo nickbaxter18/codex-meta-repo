@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:15
+    container_name: unleash_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: unleash_user
+      POSTGRES_PASSWORD: unleash_pass
+      POSTGRES_DB: unleash
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - unleash_net
+
+  unleash:
+    image: unleashorg/unleash-server:latest
+    container_name: unleash_server
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://unleash_user:unleash_pass@db/unleash
+      DATABASE_SSL: "false"
+      LOG_LEVEL: info
+    ports:
+      - "4243:4242"   # expose Unleash on localhost:4243
+    depends_on:
+      - db
+    networks:
+      - unleash_net
+
+volumes:
+  db_data:
+    name: unleash_db_data
+
+networks:
+  unleash_net:
+    driver: bridge

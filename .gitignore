@@ -1,0 +1,22 @@
+.env
+.env.local
+
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/.venv/
+**/.pytest_cache/
+
+# Node
+**/node_modules/
+**/.pnpm-store/
+**/dist/
+**/build/
+
+# Editors
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+**/*.log

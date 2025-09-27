@@ -1,0 +1,78 @@
+{
+  "name": "codex-meta-repo",
+  "build": { "dockerfile": "Dockerfile", "context": ".." },
+  "platform": "linux/amd64",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "20", "pnpm": "true" },
+    "ghcr.io/devcontainers/features/rust:1": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+  },
+  "forwardPorts": [3000, 4243, 5432, 6379],
+  "mounts": [
+    "source=cargo-cache,target=/usr/local/cargo/registry,type=volume",
+    "source=pnpm-cache,target=/root/.pnpm-store,type=volume",
+    "source=pip-cache,target=/root/.cache/pip,type=volume"
+  ],
+  "customizations": {
+    "vscode": {
+      "settings": { "terminal.integrated.defaultProfile.linux": "bash" },
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vscode.vscode-typescript-next",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-github-actions",
+        "redhat.vscode-yaml",
+        "mtxr.sqltools",
+        "ms-ossdata.vscode-postgresql",
+        "cweijan.vscode-redis-client"
+      ]
+    }
+  },
+  "remoteUser": "vscode",
+  "services": {
+    "db": {
+      "image": "postgres:15",
+      "restart": "unless-stopped",
+      "ports": ["5432:5432"],
+      "env": {
+        "POSTGRES_USER": "postgres",
+        "POSTGRES_PASSWORD": "postgres",
+        "POSTGRES_DB": "codex_meta"
+      },
+      "volumes": ["postgres-data:/var/lib/postgresql/data"]
+    },
+    "cache": {
+      "image": "redis:7",
+      "restart": "unless-stopped",
+      "ports": ["6379:6379"],
+      "volumes": ["redis-data:/data"]
+    },
+    "unleash": {
+      "image": "unleashorg/unleash-server:latest",
+      "restart": "unless-stopped",
+      "ports": ["4243:4242"],
+      "env": {
+        "DATABASE_URL": "postgres://postgres:postgres@db/codex_meta",
+        "DATABASE_SSL": "false",
+        "LOG_LEVEL": "info"
+      },
+      "dependsOn": ["db"]
+    }
+  },
+  "volumes": {
+    "postgres-data": {},
+    "redis-data": {}
+  },
+  "containerEnv": {
+    "REDIS_HOST": "cache",
+    "REDIS_PORT": "6379",
+    "POSTGRES_HOST": "db",
+    "POSTGRES_PORT": "5432",
+    "UNLEASH_URL": "http://localhost:4243"
+  }
+}

@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install backend dependencies
+        working-directory: U-DIG-IT/backend
+        run: poetry install --sync
+
+      - name: Compile backend sources
+        working-directory: U-DIG-IT/backend
+        run: poetry run python -m compileall .
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: U-DIG-IT/frontend/pnpm-lock.yaml
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install frontend dependencies
+        working-directory: U-DIG-IT/frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint frontend
+        working-directory: U-DIG-IT/frontend
+        run: pnpm run lint
+
+      - name: Build frontend
+        working-directory: U-DIG-IT/frontend
+        run: pnpm run build
+
+  agents-js:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: core/openai-agents-js/pnpm-lock.yaml
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install workspace dependencies
+        working-directory: core/openai-agents-js
+        run: pnpm install --frozen-lockfile
+
+      - name: Run agents SDK tests
+        working-directory: core/openai-agents-js
+        run: pnpm test
