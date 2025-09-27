@@ -6,7 +6,7 @@
 	url = git@github.com:openai/openai-agents-python.git
 [submodule "core/openai-agents-js"]
 	path = core/openai-agents-js
-	url = git@github.com:openai/openai-agents-js.git
+	url = git@github.com:nickbaxter18/openai-agents-js.git
 [submodule "core/agents.md"]
 	path = core/agents.md
 	url = git@github.com:openai/agents.md.git
@@ -28,6 +28,9 @@
 [submodule "examples/openai-support-agent-demo"]
 	path = examples/openai-support-agent-demo
 	url = git@github.com:openai/openai-support-agent-demo.git
+[submodule "examples/openai-cookbook"]
+	path = examples/openai-cookbook
+	url = git@github.com:nickbaxter18/openai-cookbook.git
 [submodule "voice/whisper"]
 	path = voice/whisper
 	url = git@github.com:openai/whisper.git
