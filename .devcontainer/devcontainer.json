@@ -1,0 +1,90 @@
+{
+  "name": "Codex Meta Repo Development Environment",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspaces/codex-meta-repo",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.pylint",
+        "ms-python.mypy-type-checker",
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-json",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode.docker",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-markdown",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-powertoys"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/codex-meta-repo/U-DIG-IT/backend/.venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": true,
+        "python.linting.mypyEnabled": true,
+        "python.formatting.provider": "black",
+        "python.sortImports.args": ["--profile", "black"],
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        "files.associations": {
+          "*.md": "markdown"
+        },
+        "markdownlint.config": {
+          "default": true
+        },
+        "cSpell.enabled": true,
+        "cSpell.language": "en",
+        "docker.enabled": true,
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "forwardPorts": [
+    3000,
+    4173,
+    8000,
+    5432,
+    6379,
+    8080
+  ],
+  "portsAttributes": {
+    "3000": {
+      "label": "Frontend Dev Server"
+    },
+    "4173": {
+      "label": "Frontend Preview"
+    },
+    "8000": {
+      "label": "Backend API"
+    },
+    "5432": {
+      "label": "PostgreSQL"
+    },
+    "6379": {
+      "label": "Redis"
+    },
+    "8080": {
+      "label": "Documentation"
+    }
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspaces/codex-meta-repo,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/node_modules,target=/workspaces/codex-meta-repo/node_modules,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/U-DIG-IT/frontend/node_modules,target=/workspaces/codex-meta-repo/U-DIG-IT/frontend/node_modules,type=bind,consistency=cached"
+  ]
+}
